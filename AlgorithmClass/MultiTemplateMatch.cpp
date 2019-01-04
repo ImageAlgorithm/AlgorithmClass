@@ -596,7 +596,7 @@ void MultiMatch::threadproc(InputImagInfo info, TmpInfo tmpInfo, double dScoreTh
 // Parameter: double scoreThreshold：识别的阈值
 // Parameter: MultiMatch & sMM：MultiMatch类的对象
 //************************************
-bool MultiMatch::DoInspect(Mat &InputImg, vector<string> vecFiles, double dScoreThreshold, MultiMatch &sMM)
+bool MultiMatch::DoInspect(Mat &InputImg, vector<string> vecFiles, double dScoreThreshold, int nThrNum, MultiMatch &sMM)
 {
 	bool Res = false;
 	//读取txt文件
@@ -645,7 +645,7 @@ bool MultiMatch::DoInspect(Mat &InputImg, vector<string> vecFiles, double dScore
 	info.InputSobelDx = InputSobelDx;
 	info.InputSobelDy = InputSobelDy;
 
-	thr::threadpool pool(5);
+	thr::threadpool pool(nThrNum);
 	for (int i = 0; i < nFileNum;)
 	{	
 		//
@@ -656,7 +656,10 @@ bool MultiMatch::DoInspect(Mat &InputImg, vector<string> vecFiles, double dScore
 			i++;
 		}
 	}
-	while (pool.idlCount() < 5);
+	while (pool.idlCount() < nThrNum)
+	{
+		;
+	}
 
     delete[] tmpInfo;
     tmpInfo = NULL;

@@ -103,7 +103,7 @@ int multiMatch()
 	}
 
 	cout << "获取模板列表耗时：" << clock() - finish<< endl;
-	sMM.DoInspect(InputImg, files, 0.6, sMM);
+	sMM.DoInspect(InputImg, files, 0.6, 5, sMM);
 
 	int ressize = sMM.res.size();
 	for (int i = 0; i < ressize; i++)

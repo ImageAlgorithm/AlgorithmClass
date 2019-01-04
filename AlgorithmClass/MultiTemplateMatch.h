@@ -25,7 +25,7 @@ public:
 	// Parameter: double scoreThreshold：识别的阈值
 	// Parameter: MultiMatch & sMM：MultiMatch类的对象
 	//************************************
-	bool DoInspect(Mat &InputImg, vector<string> files, double scoreThreshold, MultiMatch &sMM);
+	bool DoInspect(Mat &InputImg, vector<string> files, double scoreThreshold, int nThrNum, MultiMatch &sMM);
 
 	//************************************
 	// Method:    listFiles：获取带绝对路径的文件名
