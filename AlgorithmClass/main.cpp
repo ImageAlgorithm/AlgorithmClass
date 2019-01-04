@@ -5,62 +5,9 @@
 #include "SlidingCode.h"
 #include "CreateMultiTemplateMatch.h"
 #include "WeChatMatch.h"
-#include "SingleMatch2.h"
 
 using namespace std;
 using namespace cv;
-
-int singleMatch2()
-{
-	//获取运行起始时间
-	clock_t start, end;
-	double time;
-	start = clock();
-
-	string InputImgPath = "E:\\Images\\testImg\\2.jpg";//argv[1];
-	string TemplatePath = "E:\\Images\\testImg\\template.jpg";//argv[2];
-
-
-	Mat InputSrcImg = imread(InputImgPath);
-	if (InputSrcImg.empty())
-	{
-		cout << "InputSrcImg image is empty!" << endl;
-		return 1;
-	}
-	Mat InputTmpImg = imread(TemplatePath);
-	if (InputTmpImg.empty())
-	{
-		cout << "InputTmpImg image is empty!" << endl;
-		return 1;
-	}
-
-	vector<MatchRst> rst;
-	SingleMatch2 pro;
-	//计算时间
-	clock_t readImg = clock();
-	time = (double)(readImg - start);
-	cout << "读取模板和原图时间：" << time << endl;
-
-	pro.DoInspect(InputSrcImg, InputTmpImg, rst, 2, 0.01);
-	for (int i = 0; i < rst.size(); i++) 
-	{
-		cout << "x:" << rst[i].nCentX << "y:" << rst[i].nCentY << "dScore:" << rst[i].dScore << endl;
-	}
-
-	//计算运行时间
-	end = clock();
-	time = (double)(end - start);
-	cout << "\n此程序的运行时间为" << time << endl;
-
-// 	Rect rect;
-// 	rect.x = res.nCentX - InputTmpImg.cols / 2;
-// 	rect.y = res.nCentY - InputTmpImg.rows / 2;
-// 	rect.height = InputTmpImg.rows;
-// 	rect.width = InputTmpImg.cols;
-// 	rectangle(InputSrcImg, rect, Scalar(0, 0, 255), 2, 8, 0);//对外轮廓加矩形框 
-// 	imwrite("MatchRst.bmp", InputSrcImg);
-
-}
 
 
 /*
@@ -113,7 +60,7 @@ int singleMatch()
 	rect.width = InputTmpImg.cols;
 	rectangle(InputSrcImg, rect, Scalar(0, 0, 255), 2, 8, 0);//对外轮廓加矩形框 
 	imwrite("MatchRst.bmp", InputSrcImg);
-
+	return 0;
 }
 
 /*
