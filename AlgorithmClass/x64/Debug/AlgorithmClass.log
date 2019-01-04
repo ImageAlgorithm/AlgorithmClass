@@ -1,0 +1,31 @@
+﻿cl : 命令行 warning D9030: “/Gm”与多处理不兼容；忽略 /MP 开关
+  WeChatMatch.cpp
+e:\vs2015project\algorithmclass\algorithmclass\wechatmatch.cpp(14): warning C4244: “参数”: 从“double”转换到“int”，可能丢失数据
+e:\vs2015project\algorithmclass\algorithmclass\wechatmatch.cpp(33): warning C4244: “初始化”: 从“float”转换到“int”，可能丢失数据
+e:\vs2015project\algorithmclass\algorithmclass\wechatmatch.cpp(34): warning C4244: “初始化”: 从“float”转换到“int”，可能丢失数据
+e:\vs2015project\algorithmclass\algorithmclass\wechatmatch.cpp(35): warning C4244: “初始化”: 从“float”转换到“int”，可能丢失数据
+e:\vs2015project\algorithmclass\algorithmclass\wechatmatch.cpp(37): warning C4244: “参数”: 从“float”转换到“int”，可能丢失数据
+  SingleMatch.cpp
+e:\vs2015project\algorithmclass\algorithmclass\singlematch.cpp(378): warning C4244: “参数”: 从“double”转换到“float”，可能丢失数据
+  MultiTemplateMatch.cpp
+e:\vs2015project\algorithmclass\algorithmclass\multitemplatematch.cpp(213): warning C4244: “参数”: 从“double”转换到“float”，可能丢失数据
+e:\vs2015project\algorithmclass\algorithmclass\multitemplatematch.cpp(311): warning C4267: “初始化”: 从“size_t”转换到“int”，可能丢失数据
+e:\vs2015project\algorithmclass\algorithmclass\multitemplatematch.cpp(405): warning C4244: “初始化”: 从“double”转换到“int”，可能丢失数据
+e:\vs2015project\algorithmclass\algorithmclass\multitemplatematch.cpp(421): warning C4267: “初始化”: 从“size_t”转换到“int”，可能丢失数据
+e:\vs2015project\algorithmclass\algorithmclass\multitemplatematch.cpp(523): warning C4267: “=”: 从“size_t”转换到“int”，可能丢失数据
+e:\vs2015project\algorithmclass\algorithmclass\multitemplatematch.cpp(525): warning C4267: “=”: 从“size_t”转换到“int”，可能丢失数据
+  main.cpp
+e:\vs2015project\algorithmclass\algorithmclass\main.cpp(92): warning C4267: “初始化”: 从“size_t”转换到“int”，可能丢失数据
+e:\vs2015project\algorithmclass\algorithmclass\main.cpp(98): warning C4267: “初始化”: 从“size_t”转换到“int”，可能丢失数据
+e:\vs2015project\algorithmclass\algorithmclass\main.cpp(180): warning C4267: “初始化”: 从“size_t”转换到“int”，可能丢失数据
+e:\vs2015project\algorithmclass\algorithmclass\main.cpp(274): warning C4267: “=”: 从“size_t”转换到“int”，可能丢失数据
+e:\vs2015project\algorithmclass\algorithmclass\main.cpp(276): warning C4267: “=”: 从“size_t”转换到“int”，可能丢失数据
+  HuaDongYZMFind.cpp
+e:\vs2015project\algorithmclass\algorithmclass\huadongyzmfind.cpp(266): warning C4267: “初始化”: 从“size_t”转换到“int”，可能丢失数据
+  CreateMultiTemplateFile.cpp
+  正在生成代码...
+e:\vs2015project\algorithmclass\algorithmclass\main.cpp(107): warning C4715: “multiMathc”: 不是所有的控件路径都返回值
+e:\vs2015project\algorithmclass\algorithmclass\main.cpp(58): warning C4715: “singleMatch”: 不是所有的控件路径都返回值
+e:\vs2015project\algorithmclass\algorithmclass\multitemplatematch.cpp(565): warning C4715: “MultiMatch::getMultiResult”: 不是所有的控件路径都返回值
+  AlgorithmClass.vcxproj -> E:\vs2015Project\AlgorithmClass\x64\Debug\AlgorithmClass.exe
+  AlgorithmClass.vcxproj -> E:\vs2015Project\AlgorithmClass\x64\Debug\AlgorithmClass.pdb (Full PDB)

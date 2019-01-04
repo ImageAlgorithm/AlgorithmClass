@@ -1,0 +1,6 @@
+﻿  SingleTemplateMatch.cpp
+e:\vs2015project\algorithmclass\algorithmclass\singletemplatematch.cpp(343): warning C4244: “参数”: 从“double”转换到“float”，可能丢失数据
+e:\vs2015project\algorithmclass\algorithmclass\singletemplatematch.cpp(357): warning C4018: “<”: 有符号/无符号不匹配
+  main.cpp
+  正在生成代码...
+opencv_world342.lib(opencv_world342.dll) : fatal error LNK1112: 模块计算机类型“x64”与目标计算机类型“X86”冲突
