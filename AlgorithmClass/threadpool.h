@@ -1,4 +1,8 @@
-﻿#ifndef THREAD_POOL_H
+﻿/***************************************************************************
+ * 线程池文件，实现了线程池类threadpool,命名空间为thr
+****************************************************************************/
+
+#ifndef THREAD_POOL_H
 #define THREAD_POOL_H
 
 #include <vector>
@@ -110,7 +114,6 @@ namespace thr
 		int idlCount() { return idlThrNum; }
 
 	};
-
 }
 
 #endif

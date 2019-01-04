@@ -1,5 +1,9 @@
-﻿#ifndef _STRUCTURE_HPP
-#define _STRUCTURE_HPP
+﻿/***************************************************************************
+*各个算法中的结构体的声明文件
+****************************************************************************/
+
+#ifndef _STRUCTURE_H_
+#define _STRUCTURE_H_
 # include <string>
 # include <opencv2/opencv.hpp>
 
@@ -114,4 +118,4 @@ struct PosLength
 	int nStartPos;
 };
 
-#endif   // _STRUCTURE_HPP
+#endif   // _STRUCTURE_H_

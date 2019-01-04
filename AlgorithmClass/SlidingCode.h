@@ -1,4 +1,8 @@
-﻿#ifndef SLIDINGCODE_H_
+﻿/***************************************************************************
+*单模板匹配算法的头文件，声明了SlidingCode类
+****************************************************************************/
+
+#ifndef SLIDINGCODE_H_
 #define SLIDINGCODE_H_
 
 #include <vector>
@@ -7,6 +11,9 @@
 using namespace std;
 using namespace cv;
 
+//************************************
+// 滑动验证码识别算法的类，类接口：DoInspect
+//************************************
 class SlidingCode
 {
 public:

@@ -1,4 +1,8 @@
-﻿#include <string>
+﻿/***************************************************************************
+* 所有算法的测试文件，每个算法对应一个测试函数，并在main函数中调用，测试相应的算法
+****************************************************************************/
+
+#include <string>
 #include <opencv2/opencv.hpp>
 #include "SingleMatch.h"
 #include "MultiTemplateMatch.h"
@@ -99,7 +103,7 @@ int multiMatch()
 	}
 
 	cout << "获取模板列表耗时：" << clock() - finish<< endl;
-	sMM.getMultiResult(InputImg, files, 0.6, sMM);
+	sMM.DoInspect(InputImg, files, 0.6, sMM);
 
 	int ressize = sMM.res.size();
 	for (int i = 0; i < ressize; i++)
@@ -477,7 +481,6 @@ int WeChatTest()
 
 int main()
 {
-	//singleMatch2();
 	//multiMatch();
 	singleMatch();
 	//sliding();

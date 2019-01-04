@@ -1,3 +1,7 @@
+ï»¿/***************************************************************************
+* åˆ›å»ºå¤šæ¨¡æ¿æ–‡ä»¶ï¼ˆ.mdl)ç¨‹åºæ–‡ä»¶ï¼Œå®ç°äº†CreateModelç±»çš„æ‰€æœ‰å‡½æ•°
+****************************************************************************/
+
 #include <iostream>
 #include <opencv2/opencv.hpp>
 #include <math.h>
@@ -13,14 +17,14 @@ using namespace std;
 using namespace cv;
 
 //************************************
-// Method:    GetSobelEdge µÃµ½Í¼Æ¬µÄX¡¢Y·½ÏòÍ¼
+// Method:    GetSobelEdge å¾—åˆ°å›¾ç‰‡çš„Xã€Yæ–¹å‘å›¾
 // FullName:  CreateModel::GetSobelEdge
 // Access:    public 
 // Returns:   bool
 // Qualifier:
-// Parameter: Mat InputImg	Ô­Í¼Ïñ
-// Parameter: Mat & InputSobelDx  Í¼ÏñµÄSobelX·½ÏòÍ¼
-// Parameter: Mat & InputSobelDy  Í¼ÏñµÄSobelX·½ÏòÍ¼
+// Parameter: Mat InputImg	åŸå›¾åƒ
+// Parameter: Mat & InputSobelDx  å›¾åƒçš„SobelXæ–¹å‘å›¾
+// Parameter: Mat & InputSobelDy  å›¾åƒçš„SobelXæ–¹å‘å›¾
 //************************************
 bool CreateModel::GetSobelEdge(Mat InputImg, Mat& InputSobelDx, Mat& InputSobelDy)
 {
@@ -29,7 +33,7 @@ bool CreateModel::GetSobelEdge(Mat InputImg, Mat& InputSobelDx, Mat& InputSobelD
 		return false;
 	}
 
-	Mat GrayInputImg;  //»Ò¶ÈÍ¼Ïñ
+	Mat GrayInputImg;  //ç°åº¦å›¾åƒ
 	cvtColor(InputImg, GrayInputImg, COLOR_BGR2GRAY);
 
 	Sobel(GrayInputImg, InputSobelDx, CV_16S, 1, 0, 3);
@@ -39,14 +43,14 @@ bool CreateModel::GetSobelEdge(Mat InputImg, Mat& InputSobelDx, Mat& InputSobelD
 }
 
 //************************************
-// Method:    CreateDoubleMatrix£º´´½¨¶şÎ¬Êı×é
+// Method:    CreateDoubleMatrixï¼šåˆ›å»ºäºŒç»´æ•°ç»„
 // FullName:  CreateModel::CreateDoubleMatrix
 // Access:    public 
 // Returns:   bool
 // Qualifier:
-// Parameter: double * *  & matrix£º¶şÎ¬Êı×éµÄÍ·Ö¸Õë  
-// Parameter: int height£º¶şÎ¬Êı×éµÄ¸ß¶È
-// Parameter: int width£º¶şÎ¬Êı×éµÄ¿í¶È
+// Parameter: double * *  & matrixï¼šäºŒç»´æ•°ç»„çš„å¤´æŒ‡é’ˆ  
+// Parameter: int heightï¼šäºŒç»´æ•°ç»„çš„é«˜åº¦
+// Parameter: int widthï¼šäºŒç»´æ•°ç»„çš„å®½åº¦
 //************************************
 bool CreateModel::CreateDoubleMatrix(double** &matrix, int nHeight, int nWidth)
 {
@@ -74,13 +78,13 @@ bool CreateModel::CreateDoubleMatrix(double** &matrix, int nHeight, int nWidth)
 }
 
 //************************************
-// Method:    DeleteDoubleMatrix£ºÉ¾³ı¶şÎ¬Êı×é
+// Method:    DeleteDoubleMatrixï¼šåˆ é™¤äºŒç»´æ•°ç»„
 // FullName:  CreateModel::DeleteDoubleMatrix
 // Access:    public 
 // Returns:   void
 // Qualifier:
-// Parameter: double * * & matrix£º¶şÎ¬Êı×éµÄÍ·Ö¸Õë
-// Parameter: int height£º¶şÎ¬Êı×éµÄ¸ß¶È
+// Parameter: double * * & matrixï¼šäºŒç»´æ•°ç»„çš„å¤´æŒ‡é’ˆ
+// Parameter: int heightï¼šäºŒç»´æ•°ç»„çš„é«˜åº¦
 //************************************
 bool CreateModel::DeleteDoubleMatrix(double **&matrix, int nHeight)
 {
@@ -101,20 +105,20 @@ bool CreateModel::DeleteDoubleMatrix(double **&matrix, int nHeight)
 
 
 //************************************
-// Method:    CreateMatchEdgeModel£º´´½¨Ä£°åµÄÄ£ĞÍÊı¾İ
+// Method:    CreateMatchEdgeModelï¼šåˆ›å»ºæ¨¡æ¿çš„æ¨¡å‹æ•°æ®
 // FullName:  CreateModel::CreateMatchEdgeModel
 // Access:    public 
 // Returns:   bool
 // Qualifier:
-// Parameter: Mat templateSobelXImg£ºÄ£°åµÄX·½ÏòÍ¼£¨Sobel£©
-// Parameter: Mat templateSobelYImg£ºÄ£°åµÄY·½ÏòÍ¼£¨Sobel£©
-// Parameter: double maxThre£º×î´óãĞÖµ
-// Parameter: double minThre£º×îĞ¡ãĞÖµ
-// Parameter: int & nofEdgePiex£º±ßÔµÏñËØÊı
-// Parameter: CvPoint * pPositionEdge£º´æ´¢±ßÔµ×ø±ê
-// Parameter: double * pEdgeMagnitude£º´æ´¢±ßÔµÌİ¶È´óĞ¡µÄµ¹Êı
-// Parameter: double * pEdgeMX£º´æ´¢x·½Ïò±ßÔµÌİ¶È
-// Parameter: double * pEdgeMY£º´æ´¢y·½Ïò±ßÔµÌİ¶È
+// Parameter: Mat templateSobelXImgï¼šæ¨¡æ¿çš„Xæ–¹å‘å›¾ï¼ˆSobelï¼‰
+// Parameter: Mat templateSobelYImgï¼šæ¨¡æ¿çš„Yæ–¹å‘å›¾ï¼ˆSobelï¼‰
+// Parameter: double maxThreï¼šæœ€å¤§é˜ˆå€¼
+// Parameter: double minThreï¼šæœ€å°é˜ˆå€¼
+// Parameter: int & nofEdgePiexï¼šè¾¹ç¼˜åƒç´ æ•°
+// Parameter: CvPoint * pPositionEdgeï¼šå­˜å‚¨è¾¹ç¼˜åæ ‡
+// Parameter: double * pEdgeMagnitudeï¼šå­˜å‚¨è¾¹ç¼˜æ¢¯åº¦å¤§å°çš„å€’æ•°
+// Parameter: double * pEdgeMXï¼šå­˜å‚¨xæ–¹å‘è¾¹ç¼˜æ¢¯åº¦
+// Parameter: double * pEdgeMYï¼šå­˜å‚¨yæ–¹å‘è¾¹ç¼˜æ¢¯åº¦
 //************************************
 bool CreateModel::CreateMatchEdgeModel(Mat templateSobelXImg, Mat templateSobelYImg, double dMaxThre, double dMinThre,
 	int &nOfEdgePiex, CvPoint *pPositionEdge, double *pEdgeMagnitude, double *pEdgeMX, double *pEdgeMY)
@@ -138,7 +142,7 @@ bool CreateModel::CreateMatchEdgeModel(Mat templateSobelXImg, Mat templateSobelY
 
 	int nCount = 0;
 
-	int *pnOrients = new int[nTmpWidth * nTmpHeight];//´æ´¢·½Ïò
+	int *pnOrients = new int[nTmpWidth * nTmpHeight];//å­˜å‚¨æ–¹å‘
 	if (NULL == pnOrients)
 	{
 		return false;
@@ -170,13 +174,13 @@ bool CreateModel::CreateMatchEdgeModel(Mat templateSobelXImg, Mat templateSobelY
 		{
 			dDx = pSdx[j];
 			dDy = pSdy[j];
-			dMag = sqrt((float)(dDx * dDx) + (float)(dDy * dDy));  //±ß½çÇ¿¶È
-			dDirection = cvFastArctan((float)dDy, (float)dDx);	  //±ß½ç·½Ïò
+			dMag = sqrt((float)(dDx * dDx) + (float)(dDy * dDy));  //è¾¹ç•Œå¼ºåº¦
+			dDirection = cvFastArctan((float)dDy, (float)dDx);	  //è¾¹ç•Œæ–¹å‘
 			pMagMat[i][j] = dMag;
 
 			if (dMag > dMaxGradient)
 			{
-				dMaxGradient = dMag; //ÕıÔò»¯ get maximum gradient value for normalizing.
+				dMaxGradient = dMag; //æ­£åˆ™åŒ– get maximum gradient value for normalizing.
 			}
 
 			// get closest angle from 0, 45, 90, 135 set
@@ -207,7 +211,7 @@ bool CreateModel::CreateMatchEdgeModel(Mat templateSobelXImg, Mat templateSobelY
 		}
 	}
 
-	//·Ç×î´óÒÖÖÆ·¨
+	//éæœ€å¤§æŠ‘åˆ¶æ³•
 	nCount = 0;
 	double dLeftPixel = 0, dRightPixel = 0;
 
@@ -236,7 +240,7 @@ bool CreateModel::CreateMatchEdgeModel(Mat templateSobelXImg, Mat templateSobelY
 				dRightPixel = pMagMat[i + 1][j + 1];
 				break;
 			}
-			// ½«µ±Ç°ÏñËØÖµÓëÏàÁÚÏñËØ½øĞĞ±È½Ïcompare current pixels value with adjacent pixels
+			// å°†å½“å‰åƒç´ å€¼ä¸ç›¸é‚»åƒç´ è¿›è¡Œæ¯”è¾ƒcompare current pixels value with adjacent pixels
 			if ((pMagMat[i][j] < dLeftPixel) || (pMagMat[i][j] < dRightPixel))
 			{
 				nmsEdges.at<uchar>(i, j) = 0;
@@ -250,7 +254,7 @@ bool CreateModel::CreateMatchEdgeModel(Mat templateSobelXImg, Mat templateSobelY
 		}
 	}
 
-	//ÖÍºóãĞÖµ
+	//æ»åé˜ˆå€¼
 	int nFlg = 1;
 	int nRSum = 0, nCSum = 0;
 	CvPoint ptCenterOfGravity(0, 0);
@@ -263,7 +267,7 @@ bool CreateModel::CreateMatchEdgeModel(Mat templateSobelXImg, Mat templateSobelY
 		{
 			dDx = pSdx[j];
 			dDy = pSdy[j];
-			dMag = sqrt(dDx * dDx + dDy * dDy); //Ìİ¶ÈÇ¿¶ÈMagnitude = Sqrt(gx^2 +gy^2)												
+			dMag = sqrt(dDx * dDx + dDy * dDy); //æ¢¯åº¦å¼ºåº¦Magnitude = Sqrt(gx^2 +gy^2)												
 			nFlg = 1;
 			if (((double)(nmsEdges.at<uchar>(i, j))) < dMaxThre)
 			{
@@ -271,10 +275,10 @@ bool CreateModel::CreateMatchEdgeModel(Mat templateSobelXImg, Mat templateSobelY
 				{
 
 					(nmsEdges.at<uchar>(i, j)) = 0;
-					nFlg = 0; // ²»ÊÇ±ßÔµ£¬remove from edge
+					nFlg = 0; // ä¸æ˜¯è¾¹ç¼˜ï¼Œremove from edge
 				}
 				else
-				{   // Èç¹û8¸öÏàÁÚÏñËØÖĞµÄÈÎºÎÒ»¸ö²»´óÓÚ×î´óÖµ£¬Ôò´Ó±ßÔµÒÆ³ı
+				{   // å¦‚æœ8ä¸ªç›¸é‚»åƒç´ ä¸­çš„ä»»ä½•ä¸€ä¸ªä¸å¤§äºæœ€å¤§å€¼ï¼Œåˆ™ä»è¾¹ç¼˜ç§»é™¤
 					if ((((double)(nmsEdges.at<uchar>(i - 1, j - 1))) < dMaxThre) &&
 						(((double)(nmsEdges.at<uchar>(i - 1, j))) < dMaxThre) &&
 						(((double)((nmsEdges.at<uchar>(i - 1, j + 1)))) < dMaxThre) &&
@@ -290,7 +294,7 @@ bool CreateModel::CreateMatchEdgeModel(Mat templateSobelXImg, Mat templateSobelY
 				}
 			}
 
-			//±£´æÌáÈ¡µ½µÄ±ßÔµĞÅÏ¢
+			//ä¿å­˜æå–åˆ°çš„è¾¹ç¼˜ä¿¡æ¯
 			if (nFlg != 0)
 			{
 				if (dDx != 0 || dDy != 0)
@@ -343,12 +347,12 @@ bool CreateModel::CreateMatchEdgeModel(Mat templateSobelXImg, Mat templateSobelY
 }
 
 //************************************
-// Method:    CreateDirectory£ºÂ·¾¶ÏÂ´´½¨ĞÂÎÄ¼ş¼Ğ
+// Method:    CreateDirectoryï¼šè·¯å¾„ä¸‹åˆ›å»ºæ–°æ–‡ä»¶å¤¹
 // FullName:  CreateModel::CreateDirectory
 // Access:    public 
 // Returns:   bool
 // Qualifier:
-// Parameter: const string folder£ºÎÄ¼şÂ·¾¶
+// Parameter: const string folderï¼šæ–‡ä»¶è·¯å¾„
 //************************************
 bool CreateModel::CreateDirectory(const string folder)
 {
@@ -369,7 +373,7 @@ bool CreateModel::CreateDirectory(const string folder)
 		{
 			folder_builder.append(sub);
 
-			if (0 != _access(folder_builder.c_str(), 0))  // ÎÄ¼ş¼Ğ²»´æÔÚ£¬Ôò´´½¨
+			if (0 != _access(folder_builder.c_str(), 0))  // æ–‡ä»¶å¤¹ä¸å­˜åœ¨ï¼Œåˆ™åˆ›å»º
 			{
 				// this folder not exist
 				if (0 != _mkdir(folder_builder.c_str()))
@@ -386,22 +390,22 @@ bool CreateModel::CreateDirectory(const string folder)
 }
 
 //************************************
-// Method:    Write£º½«Ä£°åÊı¾İĞ´ÈëmdlÎÄ¼ş
+// Method:    Writeï¼šå°†æ¨¡æ¿æ•°æ®å†™å…¥mdlæ–‡ä»¶
 // FullName:  CreateModel::Write
 // Access:    public 
 // Returns:   bool
 // Qualifier:
-// Parameter: const string strFolder£ºÎÄ¼şÂ·¾¶
-// Parameter: const string strFileName£ºÎÄ¼şÃû
-// Parameter: int nOfEdgePiex£º±ßÔµÌØÕ÷µãµÄ¸öÊı
-// Parameter: CvPoint * pPositionEdge£º±ßÔµÌØÕ÷µãµÄ×ø±ê
-// Parameter: double * pdEdgeMagnitude£º±ßÔµÌØÕ÷µãµÄÌİ¶ÈµÄµ¹Êı
-// Parameter: double * pdEdgeMX£ºX·½ÏòµÄ±ßÔµÌİ¶È
-// Parameter: double * pdEdgeMY£ºY·½ÏòµÄ±ßÔµÌİ¶È
-// Parameter: int nTmpWidth£ºÄ£°åµÄ¿í¶È
-// Parameter: int nTmpHeight£ºÄ£°åµÄ¸ß¶È
-// Parameter: int nPyrCount£º½µ²ÉÑùµÄ´ÎÊı
-// Parameter: bool IsSrc£ºÊÇ·ñÊÇÔ­Í¼
+// Parameter: const string strFolderï¼šæ–‡ä»¶è·¯å¾„
+// Parameter: const string strFileNameï¼šæ–‡ä»¶å
+// Parameter: int nOfEdgePiexï¼šè¾¹ç¼˜ç‰¹å¾ç‚¹çš„ä¸ªæ•°
+// Parameter: CvPoint * pPositionEdgeï¼šè¾¹ç¼˜ç‰¹å¾ç‚¹çš„åæ ‡
+// Parameter: double * pdEdgeMagnitudeï¼šè¾¹ç¼˜ç‰¹å¾ç‚¹çš„æ¢¯åº¦çš„å€’æ•°
+// Parameter: double * pdEdgeMXï¼šXæ–¹å‘çš„è¾¹ç¼˜æ¢¯åº¦
+// Parameter: double * pdEdgeMYï¼šYæ–¹å‘çš„è¾¹ç¼˜æ¢¯åº¦
+// Parameter: int nTmpWidthï¼šæ¨¡æ¿çš„å®½åº¦
+// Parameter: int nTmpHeightï¼šæ¨¡æ¿çš„é«˜åº¦
+// Parameter: int nPyrCountï¼šé™é‡‡æ ·çš„æ¬¡æ•°
+// Parameter: bool IsSrcï¼šæ˜¯å¦æ˜¯åŸå›¾
 //************************************
 bool CreateModel::Write(const string strFolder, const string strFileName, int nOfEdgePiex, CvPoint *pPositionEdge, double *pdEdgeMagnitude,
 	double *pdEdgeMX, double *pdEdgeMY, int nTmpWidth, int nTmpHeight, int nPyrCount, bool IsSrc)
@@ -451,15 +455,15 @@ bool CreateModel::Write(const string strFolder, const string strFileName, int nO
 
 
 //************************************
-// Method:    listFilesº¯ÊıÆäÊµÔÚÀûÓÃµİ¹é£¬Õâ¸öº¯Êı²»½ö¿ÉÒÔÕÒÄ¿Â¼ÖĞµÄÎÄ¼ş£¬»¹¿ÉÒÔÕÒµ½Ä¿Â¼ÏÂÃ¿Ò»²ãµÄÎÄ¼ş
-// 	ÔÚ´ó¶àÊıÇé¿öÏÂ²¢²»ĞèÒªÇø·ÖÊÇ±éÀúÄ¿Â¼ÏÂ»¹ÊÇ±éÀúÄ¿Â¼ÖĞ£¬ÒòÎªÄ¿Â¼ÊÇÎÒÃÇ×Ô¼º´´½¨µÄ£¬Òª±éÀúµÄÂ·¾¶Ò²ÊÇ×Ô¼ºÊäÈë
-// 	ËùÒÔÎÒÃÇÍêÈ«¿ÉÒÔ°ÑÕâ¸öµ±×ö±éÀúÄ¿Â¼ÖĞÎÄ¼şµÄº¯ÊıÀ´ÓÃÄ¿Â¼ÖĞµÄËùÓĞÍ¼Æ¬(µ½Ã¿Ò»¼¶Ä¿Â¼)
+// Method:    listFileså‡½æ•°å…¶å®åœ¨åˆ©ç”¨é€’å½’ï¼Œè¿™ä¸ªå‡½æ•°ä¸ä»…å¯ä»¥æ‰¾ç›®å½•ä¸­çš„æ–‡ä»¶ï¼Œè¿˜å¯ä»¥æ‰¾åˆ°ç›®å½•ä¸‹æ¯ä¸€å±‚çš„æ–‡ä»¶
+// 	åœ¨å¤§å¤šæ•°æƒ…å†µä¸‹å¹¶ä¸éœ€è¦åŒºåˆ†æ˜¯éå†ç›®å½•ä¸‹è¿˜æ˜¯éå†ç›®å½•ä¸­ï¼Œå› ä¸ºç›®å½•æ˜¯æˆ‘ä»¬è‡ªå·±åˆ›å»ºçš„ï¼Œè¦éå†çš„è·¯å¾„ä¹Ÿæ˜¯è‡ªå·±è¾“å…¥
+// 	æ‰€ä»¥æˆ‘ä»¬å®Œå…¨å¯ä»¥æŠŠè¿™ä¸ªå½“åšéå†ç›®å½•ä¸­æ–‡ä»¶çš„å‡½æ•°æ¥ç”¨ç›®å½•ä¸­çš„æ‰€æœ‰å›¾ç‰‡(åˆ°æ¯ä¸€çº§ç›®å½•)
 // FullName:  CreateModel::listFiles
 // Access:    public 
 // Returns:   bool
 // Qualifier:
-// Parameter: const char * pDir£ºÂ·¾¶
-// Parameter: vector<string> & files£ºµÃµ½µÄ´øÂ·¾¶µÄÎÄ¼şÃû
+// Parameter: const char * pDirï¼šè·¯å¾„
+// Parameter: vector<string> & filesï¼šå¾—åˆ°çš„å¸¦è·¯å¾„çš„æ–‡ä»¶å
 //************************************
 bool CreateModel::listFiles(const char *pDir, vector<string> &files)
 {
@@ -470,11 +474,11 @@ bool CreateModel::listFiles(const char *pDir, vector<string> &files)
 
 	char dirNew[200];
 	strcpy_s(dirNew, sizeof(dirNew) / sizeof(dirNew[0]), pDir);
-	strcat_s(dirNew, sizeof(dirNew), "\\*.*");   // ÔÚÄ¿Â¼ºóÃæ¼ÓÉÏ"\\*.*"½øĞĞµÚÒ»´ÎËÑË÷
+	strcat_s(dirNew, sizeof(dirNew), "\\*.*");   // åœ¨ç›®å½•åé¢åŠ ä¸Š"\\*.*"è¿›è¡Œç¬¬ä¸€æ¬¡æœç´¢
 	intptr_t handle;
 	_finddata_t findData;
 	handle = _findfirst(dirNew, &findData);
-	if (handle == -1)        // ¼ì²éÊÇ·ñ³É¹¦
+	if (handle == -1)        // æ£€æŸ¥æ˜¯å¦æˆåŠŸ
 	{
 		return false;
 	}
@@ -486,7 +490,7 @@ bool CreateModel::listFiles(const char *pDir, vector<string> &files)
 			if (strcmp(findData.name, ".") == 0 || strcmp(findData.name, "..") == 0)
 				continue;
 
-			// ÔÚÄ¿Â¼ºóÃæ¼ÓÉÏ"\\"ºÍËÑË÷µ½µÄÄ¿Â¼Ãû½øĞĞÏÂÒ»´ÎËÑË÷
+			// åœ¨ç›®å½•åé¢åŠ ä¸Š"\\"å’Œæœç´¢åˆ°çš„ç›®å½•åè¿›è¡Œä¸‹ä¸€æ¬¡æœç´¢
 			// 			strcpy_s(dirNew, sizeof(dirNew) / sizeof(dirNew[0]), pDir);
 			// 			strcat_s(dirNew, sizeof(dirNew), "\\");
 			// 			strcat_s(dirNew, sizeof(dirNew), findData.name);
@@ -500,18 +504,18 @@ bool CreateModel::listFiles(const char *pDir, vector<string> &files)
 		//cout << findData.name << "\t" << findData.size << " bytes.\n";
 	} while (_findnext(handle, &findData) == 0);
 
-	_findclose(handle);    // ¹Ø±ÕËÑË÷¾ä±ú
+	_findclose(handle);    // å…³é—­æœç´¢å¥æŸ„
 
 	return true;
 }
 
 //************************************
-// Method:    is_dir£ºÅĞ¶ÏÎÄ¼şÊôĞÔÊÇÄ¿Â¼»¹ÊÇÎÄ¼ş
+// Method:    is_dirï¼šåˆ¤æ–­æ–‡ä»¶å±æ€§æ˜¯ç›®å½•è¿˜æ˜¯æ–‡ä»¶
 // FullName:  CreateModel::is_dir
 // Access:    public 
 // Returns:   bool
 // Qualifier:
-// Parameter: int attrib£ºÎÄ¼şµÄÒ»¸öÊôĞÔ
+// Parameter: int attribï¼šæ–‡ä»¶çš„ä¸€ä¸ªå±æ€§
 //************************************
 bool CreateModel::is_dir(int attrib)
 {
@@ -519,12 +523,12 @@ bool CreateModel::is_dir(int attrib)
 }
 
 //************************************
-// Method:    show_error£ºÏÔÊ¾É¾³ıÊ§°ÜÔ­Òò
+// Method:    show_errorï¼šæ˜¾ç¤ºåˆ é™¤å¤±è´¥åŸå› 
 // FullName:  CreateModel::show_error
 // Access:    public 
 // Returns:   void
 // Qualifier:
-// Parameter: const char * file_name£º
+// Parameter: const char * file_nameï¼š
 //************************************
 void CreateModel::show_error(const char *file_name)
 {
@@ -545,7 +549,7 @@ void CreateModel::show_error(const char *file_name)
 }
 
 //************************************
-// Method:    get_file_path£º»ñÈ¡ÎÄ¼şÂ·¾¶
+// Method:    get_file_pathï¼šè·å–æ–‡ä»¶è·¯å¾„
 // FullName:  CreateModel::get_file_path
 // Access:    public 
 // Returns:   bool
@@ -569,7 +573,7 @@ bool CreateModel::get_file_path(const char *pcPath, const char *pcFileName, char
 }
 
 //************************************
-// Method:    deletefile£ºµİ¹éËÑË÷Ä¿Â¼ÖĞÎÄ¼ş²¢É¾³ı
+// Method:    deletefileï¼šé€’å½’æœç´¢ç›®å½•ä¸­æ–‡ä»¶å¹¶åˆ é™¤
 // FullName:  CreateModel::deletefile
 // Access:    public 
 // Returns:   bool
@@ -591,26 +595,26 @@ bool CreateModel::deletefile(const char *pcPath)
 	{
 		while (_findnext(f_handle, &file_info) == 0)
 		{
-			if (strcmp(file_info.name, ".") == 0 || strcmp(file_info.name, "..") == 0)  //ÅĞ¶ÏÊÇ·ñÊÇ".."Ä¿Â¼ºÍ"."Ä¿Â¼
+			if (strcmp(file_info.name, ".") == 0 || strcmp(file_info.name, "..") == 0)  //åˆ¤æ–­æ˜¯å¦æ˜¯".."ç›®å½•å’Œ"."ç›®å½•
 				continue;
-			if (is_dir(file_info.attrib))//Èç¹ûÊÇÄ¿Â¼£¬Éú³ÉÍêÕûµÄÂ·¾¶
+			if (is_dir(file_info.attrib))//å¦‚æœæ˜¯ç›®å½•ï¼Œç”Ÿæˆå®Œæ•´çš„è·¯å¾„
 			{
 				if (!get_file_path(pcPath, file_info.name, tmp_path))
 				{
-					cout << "»ñÈ¡ÎÄ¼şÂ·¾¶Ê§°Ü" << endl;
+					cout << "è·å–æ–‡ä»¶è·¯å¾„å¤±è´¥" << endl;
 					return false;
 				}
 
-				deletefile(tmp_path);//¿ªÊ¼µİ¹éÉ¾³ıÄ¿Â¼ÖĞµÄÄÚÈİ
+				deletefile(tmp_path);//å¼€å§‹é€’å½’åˆ é™¤ç›®å½•ä¸­çš„å†…å®¹
 				tmp_path[strlen(tmp_path) - 2] = '\0';
 				if (file_info.attrib == 20)
 					printf("This is system file, can't delete!\n");
 				else
 				{
-					//É¾³ı¿ÕÄ¿Â¼£¬±ØĞëÔÚµİ¹é·µ»ØÇ°µ÷ÓÃ_findclose,·ñÔòÎŞ·¨É¾³ıÄ¿Â¼
+					//åˆ é™¤ç©ºç›®å½•ï¼Œå¿…é¡»åœ¨é€’å½’è¿”å›å‰è°ƒç”¨_findclose,å¦åˆ™æ— æ³•åˆ é™¤ç›®å½•
 					if (_rmdir(tmp_path) == -1)
 					{
-						show_error();//Ä¿Â¼·Ç¿ÕÔò»áÏÔÊ¾³ö´íÔ­Òò
+						show_error();//ç›®å½•éç©ºåˆ™ä¼šæ˜¾ç¤ºå‡ºé”™åŸå› 
 					}
 				}
 			}
@@ -618,7 +622,7 @@ bool CreateModel::deletefile(const char *pcPath)
 			{
 				strcpy_s(tmp_path, pcPath);
 				tmp_path[strlen(tmp_path) - 1] = '\0';
-				strcat_s(tmp_path, file_info.name);//Éú³ÉÍêÕûµÄÎÄ¼şÂ·¾¶
+				strcat_s(tmp_path, file_info.name);//ç”Ÿæˆå®Œæ•´çš„æ–‡ä»¶è·¯å¾„
 
 				if (remove(tmp_path) == -1)
 				{
@@ -627,26 +631,26 @@ bool CreateModel::deletefile(const char *pcPath)
 
 			}
 		}
-		_findclose(f_handle);//¹Ø±Õ´ò¿ªµÄÎÄ¼ş¾ä±ú£¬²¢ÊÍ·Å¹ØÁª×ÊÔ´£¬·ñÔòÎŞ·¨É¾³ı¿ÕÄ¿Â¼
+		_findclose(f_handle);//å…³é—­æ‰“å¼€çš„æ–‡ä»¶å¥æŸ„ï¼Œå¹¶é‡Šæ”¾å…³è”èµ„æºï¼Œå¦åˆ™æ— æ³•åˆ é™¤ç©ºç›®å½•
 	}
 	else
 	{
-		show_error();//ÈôÂ·¾¶²»´æÔÚ£¬ÏÔÊ¾´íÎóĞÅÏ¢
+		show_error();//è‹¥è·¯å¾„ä¸å­˜åœ¨ï¼Œæ˜¾ç¤ºé”™è¯¯ä¿¡æ¯
 		return false;
 	}
 	return true;
 }
 
 //************************************
-// Method:    pyr£º»ñÈ¡½µ²ÉÑù´ÎÊı
+// Method:    pyrï¼šè·å–é™é‡‡æ ·æ¬¡æ•°
 // FullName:  CreateModel::pyr
 // Access:    public 
 // Returns:   int
 // Qualifier:
-// Parameter: int tmpheight£ºÄ£°åµÄ¸ß¶È
-// Parameter: int tmpwidth£ºÄ£°åµÄ¿í¶È
+// Parameter: int tmpheightï¼šæ¨¡æ¿çš„é«˜åº¦
+// Parameter: int tmpwidthï¼šæ¨¡æ¿çš„å®½åº¦
 //************************************
-int CreateModel::pyr(int nTmpHeight, int nTmpWidth) //½µ²ÉÑù´ÎÊı
+int CreateModel::pyr(int nTmpHeight, int nTmpWidth) //é™é‡‡æ ·æ¬¡æ•°
 {
 	if (nTmpWidth <= 0 || nTmpHeight <= 0)
 	{

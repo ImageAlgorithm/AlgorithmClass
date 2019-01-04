@@ -1,4 +1,8 @@
-﻿#ifndef _SINGLEMATCH_H_
+﻿/***************************************************************************
+*单模板匹配算法的头文件，声明了SingleMatch类
+****************************************************************************/
+
+#ifndef _SINGLEMATCH_H_
 #define _SINGLEMATCH_H_
 
 #include <opencv2/opencv.hpp>
@@ -7,6 +11,9 @@
 using namespace std;
 using namespace cv;
 
+//************************************
+// 单模板匹配算法的类，类接口：DoInspect
+//************************************
 class SingleMatch
 {
 public:

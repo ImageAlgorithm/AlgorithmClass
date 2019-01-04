@@ -1,15 +1,22 @@
-﻿#ifndef _MULTI_TEMPLATE_MATCH_H
+﻿/***************************************************************************
+* 多模板匹配算法的头文件，声明了MultiMatch类
+****************************************************************************/
+
+#ifndef _MULTI_TEMPLATE_MATCH_H
 #define _MULTI_TEMPLATE_MATCH_H
 
 #include "structure.h"
 #include "threadpool.h"
 
+//************************************
+// 多模板匹配算法的类，类接口：DoInspect
+//************************************
 class MultiMatch
 {
 public:
 	//************************************
-	// Method:    getMultiResult：得到识别结果
-	// FullName:  MultiMatch::getMultiResult
+	// Method:    DoInspect：得到识别结果
+	// FullName:  MultiMatch::DoInspect
 	// Access:    public 
 	// Returns:   bool
 	// Qualifier:
@@ -18,7 +25,7 @@ public:
 	// Parameter: double scoreThreshold：识别的阈值
 	// Parameter: MultiMatch & sMM：MultiMatch类的对象
 	//************************************
-	bool getMultiResult(Mat &InputImg, vector<string> files, double scoreThreshold, MultiMatch &sMM);
+	bool DoInspect(Mat &InputImg, vector<string> files, double scoreThreshold, MultiMatch &sMM);
 
 	//************************************
 	// Method:    listFiles：获取带绝对路径的文件名

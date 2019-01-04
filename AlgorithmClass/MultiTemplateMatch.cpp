@@ -1,4 +1,8 @@
-﻿#include <iostream>
+﻿/***************************************************************************
+* 多模板匹配算法文件，实现了MultiMatch类的所有函数
+****************************************************************************/
+
+#include <iostream>
 #include <opencv2/opencv.hpp>
 #include <io.h>
 #include "structure.h"
@@ -582,8 +586,8 @@ void MultiMatch::threadproc(InputImagInfo info, TmpInfo tmpInfo, double dScoreTh
 }
 
 //************************************
-// Method:    getMultiResult：得到识别结果
-// FullName:  MultiMatch::getMultiResult
+// Method:    DoInspect：得到识别结果
+// FullName:  MultiMatch::DoInspect
 // Access:    public 
 // Returns:   bool
 // Qualifier:
@@ -592,7 +596,7 @@ void MultiMatch::threadproc(InputImagInfo info, TmpInfo tmpInfo, double dScoreTh
 // Parameter: double scoreThreshold：识别的阈值
 // Parameter: MultiMatch & sMM：MultiMatch类的对象
 //************************************
-bool MultiMatch::getMultiResult(Mat &InputImg, vector<string> vecFiles, double dScoreThreshold, MultiMatch &sMM)
+bool MultiMatch::DoInspect(Mat &InputImg, vector<string> vecFiles, double dScoreThreshold, MultiMatch &sMM)
 {
 	bool Res = false;
 	//读取txt文件

@@ -1,4 +1,8 @@
-﻿#ifndef _WECHATMATCH_H
+﻿/***************************************************************************
+*微信页面识别算法的头文件，声明了WeChat类
+****************************************************************************/
+
+#ifndef _WECHATMATCH_H
 #define _WECHATMATCH_H
 
 #include <opencv2/opencv.hpp>
@@ -8,6 +12,12 @@
 using namespace std;
 using namespace cv;
 
+//************************************
+// 微信页面识别算法的类，类接口：
+// NewsExist：识别是否有新消息
+// MatchNewsPosition：识别聊天页面气泡的位置
+// MatchButtonPos：识别某个按钮的位置
+//************************************
 class WeChat
 {
 public:
