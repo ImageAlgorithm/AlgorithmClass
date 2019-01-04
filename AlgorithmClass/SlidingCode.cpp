@@ -42,11 +42,16 @@ bool SlidingCode::GetRowDotNum(Mat InputImg, int nDotDist, vector<PosLength> &Le
 			if (pucData[j] == 255)
 			{
 				POINT pt;
-				pt.x = j;	
+				pt.x = j;
 				pt.y = i;
 				ptList.push_back(pt);
 			}
 		}
+	}
+
+	if (ptList.size() < 1)
+	{
+		return false;
 	}
 
 	//获得每行的点数
@@ -133,6 +138,11 @@ bool SlidingCode::GetColDotNum(Mat InputImg, int nDotDist, vector<PosLength> &Co
 				ColPtList.push_back(pt);
 			}
 		}
+	}
+
+	if (ColPtList.size() < 1)
+	{
+		return false;
 	}
 
 	// 获得每列的点数
@@ -793,6 +803,10 @@ bool SlidingCode::DoInspect(Mat InputImg, POINT StartPos, POINT DetectRegLftPos,
                                     nHuaDongKuaiWidth - nArcLength, nHuaDongKuaiHeight - nArcLength));
 
             SM.DoInspect(RightDetectImg, Tmp, rst, 1, 0.5);
+			if (rst.size() < 1)
+			{
+				return false;
+			}
 			MatchRst Res = rst[0];
             EndPos.x = Res.nCentX + (nLeftRegRgt - 2 * nError2 + 1);
         }
