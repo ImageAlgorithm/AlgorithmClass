@@ -13,7 +13,9 @@ using namespace cv;
 
 vector<Result> MultiMatch::res;
 
-
+/************************************************************************/
+/* 构造对象时，首先情况静态对象 res                                       */
+/************************************************************************/
 MultiMatch::MultiMatch()
 {
 	this->res.clear();
@@ -25,6 +27,15 @@ MultiMatch::~MultiMatch()
 
 }
 
+
+//************************************
+// Method:    ClearVector：释放vector内存
+// FullName:  MultiMatch::ClearVector
+// Access:    private 
+// Returns:   void
+// Qualifier:
+// Parameter: vector<T> & vt
+//************************************
 template <class T>
 void MultiMatch::ClearVector(vector<T>& vt)
 {
