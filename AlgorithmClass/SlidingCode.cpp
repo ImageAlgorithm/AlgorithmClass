@@ -345,20 +345,12 @@ bool SlidingCode::GetLeftHuaKuaiTopBtm(Mat inputImg, int nHuaDongKuaiWidth, int 
 	vector<Vec4i> mylines;
 	HoughLineImg = Mat::zeros(Size(InputGrayImg.cols, InputGrayImg.rows), CV_8UC1);
 
-	int anXPos[1024] = { 0 };
-	int anYPos[1024] = { 0 };
-	int nXCount = 0;
-	int nYCount = 0;
 	// 参数可变：背景复杂例如头条、哔哩哔哩的图参数为：20、8、5；
 	HoughLinesP(InputEdgeImg, mylines, 0.5, CV_PI / 180, 20, 8, 5); // Left:20, 8, 5  QQYZM:30, 10, 5
 	for (size_t i = 0; i < mylines.size(); ++i)
 	{
 		Vec4i l = mylines[i];
 		line(HoughLineImg, Point(l[0], l[1]), Point(l[2], l[3]), Scalar(255, 255, 255), 1, LINE_AA);
-		anXPos[nXCount++] = l[0];
-		anYPos[nYCount++] = l[1];
-		anXPos[nXCount++] = l[2];
-		anYPos[nYCount++] = l[3];
 	}
 
 	//imwrite("Line.bmp", HoughLineImg);

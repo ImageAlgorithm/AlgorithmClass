@@ -65,6 +65,10 @@ struct TmpInfo
 	string tmpname;   // 模板名
 	vector<double> TmpSrcData;   // 模板没降采样的边缘数据
 	vector<double> TmpPyrData;   // 模板降采样的边缘数据
+	TmpInfo()
+	{
+		nPyrCount = 0;
+	}
 };
 
 struct InputImagInfo

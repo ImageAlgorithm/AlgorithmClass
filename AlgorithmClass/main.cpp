@@ -5,10 +5,12 @@
 #include <string>
 #include <opencv2/opencv.hpp>
 #include "SingleMatch.h"
+#include "MultiTemplateMatch2.h"
 #include "MultiTemplateMatch.h"
 #include "SlidingCode.h"
 #include "CreateMultiTemplateMatch.h"
 #include "WeChatMatch.h"
+#include "threadpool.h"
 
 using namespace std;
 using namespace cv;
@@ -48,9 +50,14 @@ int singleMatch()
 	time = (double)(readImg - start);
 	cout << "读取模板和原图时间：" << time << endl;
 
-	pro.DoInspect(InputSrcImg, InputTmpImg, rst, 1, 0.6);
+	pro.DoInspect(InputSrcImg, InputTmpImg, rst, 2, 0.6);
 
 	MatchRst res = rst[0];
+	for (MatchRst mr : rst)
+	{
+		cout << "x:" << mr.nCentX << "	y:" << mr.nCentY << "	score:" << mr.dScore << endl;
+	}
+
 
 	//计算运行时间
 	end = clock();
@@ -70,8 +77,69 @@ int singleMatch()
 /*
  * 多模板测试代码，在Main函数中调用即可。
  */
+int multiMatch2()
+{
+	MultiMatch2 sMM;
+
+	clock_t start, finish;
+	double totaltime;
+	start = clock();
+
+	//读取源图像
+	string InputImgPath = "E:\\Images\\multi\\testImg\\img.jpg";//argv[1];
+	Mat InputImg = imread(InputImgPath);
+	int nChannel = InputImg.channels();
+	if (InputImg.empty())
+	{
+		cout << "Input image is empty" << endl;
+		return 1;
+	}
+	imshow("tupian", InputImg);
+	waitKey(0);
+
+	bool Res = false;
+
+	//获取各个模板文件的名字
+	char* TemplatePath = "E:\\Images\\multi\\model-LocalModels";//argv[2];
+	vector<string> files;	//带路径的文件名
+	Res = sMM.ListFiles(TemplatePath, files);
+	
+	if (!Res)
+	{
+		cout << "模板文件获取失败!" << endl;
+		return 1;
+	}
+
+	int num = files.size();
+	MultiMatch2 MM(num);
+	bool b = MM.InitData(InputImg, files);
+	if (!b)
+	{
+		cout << "识别数据初始化失败" << endl;
+		return -1;
+	}
+
+	for (int i = 0; i < files.size(); i++)
+	{
+		MM.threadproc(MM.imageInfo, MM.tmpInfo[i], 0.6);
+	}
+
+	int ressize = MM.res.size();
+	for (int i = 0; i < ressize; i++)
+	{
+		cout << MM.res[i].targetname << ":" << " nCentX:" << MM.res[i].nCentX << "; nCentY:" << MM.res[i].nCentY << endl;
+	}
+
+	finish = clock();
+	totaltime = (double)(finish - start);
+	cout << "\n此程序的运行时间为" << totaltime << "毫秒！" << endl;
+	return 0;
+}
+
 int multiMatch()
 {
+	//65个模板，1.9秒
+
 	MultiMatch sMM;
 
 	clock_t start, finish;
@@ -79,7 +147,7 @@ int multiMatch()
 	start = clock();
 
 	//读取源图像
-	string InputImgPath = "E:\\Images\\multi\\testImg\\02.png";//argv[1];
+	string InputImgPath = "E:\\Images\\multi\\testImg\\img.jpg";//argv[1];
 	Mat InputImg = imread(InputImgPath);
 	if (!InputImg.data)
 	{
@@ -87,13 +155,10 @@ int multiMatch()
 		return 1;
 	}
 
-	finish = clock();
-	cout << "读取图片耗时：" << finish - start << endl;
-
 	bool Res = false;
 
 	//获取各个模板文件的名字
-	char* TemplatePath = "E:\\Images\\multi\\model-LocalModels";//argv[2];
+	char* TemplatePath = "E:\\Images\\multi\\img2-LocalModels";//argv[2];
 	vector<string> files;	//带路径的文件名
 	Res = sMM.ListFiles(TemplatePath, files);
 	if (!Res)
@@ -102,8 +167,7 @@ int multiMatch()
 		return 1;
 	}
 
-	cout << "获取模板列表耗时：" << clock() - finish<< endl;
-	sMM.DoInspect(InputImg, files, 0.6, 5, sMM);
+	sMM.DoInspect(InputImg, files, 0.8, 5, sMM);
 
 	int ressize = sMM.res.size();
 	for (int i = 0; i < ressize; i++)
@@ -113,7 +177,7 @@ int multiMatch()
 
 	finish = clock();
 	totaltime = (double)(finish - start);
-	cout << "\n此程序的运行时间为" << totaltime << "秒！" << endl;
+	cout << "此程序的运行时间为" << totaltime << "毫秒！" << endl;
 	return 0;
 }
 
@@ -176,7 +240,7 @@ int createModelFile()
 
 	CreateModel cm;
 
-	char* TemplatePath = "E:\\Images\\multi\\model";
+	char* TemplatePath = "C:\\Users\\White\\Desktop\\temp\\img2";
 	vector<string> files;
 	bool Res = false;
 
@@ -357,8 +421,13 @@ int createModelFile()
 				pEdgeMagnitude = NULL;
 				return 1;
 			}
+			
 		}
-
+		//写入end,防止读取到错误数据死循环。
+		string strPath = TemplateMatchPath + "\\" + strFileName;
+		ofstream fout(strPath, ios::app);
+		fout << "end" << endl;
+		fout.close();
 		delete[] pPositionEdge;
 		delete[] pEdgeMagnitude;
 		pPositionEdge = NULL;
@@ -368,33 +437,111 @@ int createModelFile()
 	return 0;
 }
 
+void testReadFile()
+{
+	ifstream infile("E:\\Images\\multi\\mobilePhone\\充值.mdl");
+	if (!infile)
+	{
+		cout << "File Not Opened" << endl;
+		infile.close();
+		return ;
+	}
+
+	string  str1, str2;
+	infile >> str1 ;
+	cout << str1 << endl;
+	infile >> str1;
+	cout << str1 << endl;
+	infile >> str1;
+	cout << str1 << endl;
+	double dNumber1;
+	int a = 0;
+	while (a < 50)
+	{
+		infile >> str2;
+		if (str2 == "pyrTemplate")
+		{
+			cout << str2 << endl;
+			infile >> str2;
+			cout << str2 << endl;
+			while (a < 50)
+			{
+				double d1, d2, d3, d4, d5;
+				infile >> dNumber1;
+				d1 = dNumber1;
+				infile >> dNumber1;
+				d2 = dNumber1;
+				infile >> dNumber1;
+				d3 = dNumber1;
+				infile >> dNumber1;
+				d4 = dNumber1;
+				infile >> dNumber1;
+				d5 = dNumber1;
+				if (d1 != d3)
+				{
+					cout << d1 << endl;
+					cout << d2 << endl;
+					cout << d3 << endl;
+					cout << d4 << endl;
+					cout << d5 << endl;
+				}
+				else
+				{
+					return ;
+				}
+				a += 5;
+				
+
+			}
+		}
+		else if (str2 == "srcTemplate")
+		{
+			return ;
+		}
+		else
+		{
+			dNumber1 = atof(str2.c_str());
+			cout << dNumber1 << endl;
+			for (int i = 0; i < 4; ++i)
+			{
+				infile >> dNumber1;
+				cout << dNumber1 << endl;
+			}
+			a += 5;
+		}
+	}
+
+	infile.close();
+}
+
 int WeChatTest()
 {
-	Mat InputImg = imread("E:\\Images\\WeChatMatchTest\\222.png");//读取原图
-	if (InputImg.empty())
-	{
-		cout << "1InputImg is empty!" << endl;
-		return false;
-	}
-
-	bool bHave = false;
-
 	WeChat a;
-	bool bRes = a.NewsExist(InputImg, bHave);
-	if (!bRes)
-	{
-		return 1;
-	}
-	if (bHave) {
-		cout << "您有新的消息请及时处理！！！" << endl;
-	}
-	else {
-		cout << "您还没有新消息呦" << endl;
-	}
+// 	Mat InputImg = imread("E:\\Images\\WeChatMatchTest\\222.png");//读取原图
+// 	if (InputImg.empty())
+// 	{
+// 		cout << "1InputImg is empty!" << endl;
+// 		return false;
+// 	}
+// 
+// 	bool bHave = false;
+// 
+// 	WeChat a;
+// 	bool bRes = a.NewsExist(InputImg, bHave);
+// 	if (!bRes)
+// 	{
+// 		return 1;
+// 	}
+// 	if (bHave) {
+// 		cout << "您有新的消息请及时处理！！！" << endl;
+// 	}
+// 	else {
+// 		cout << "您还没有新消息呦" << endl;
+// 	}
 
 	/************************************识别消息气泡的位置****************************************/
-	string InputImgPath = "C:\\Users\\White\\Desktop\\WeChatMatchTest\\6.png";
-	string TemplatePath = "C:\\Users\\White\\Desktop\\WeChatMatchTest\\qipao.jpg";
+	string InputImgPath = "E:\\Images\\WeChatMatchTest\\101.png";
+	string TemplatePath = "E:\\Images\\WeChatMatchTest\\tmp.jpg";
 
 	Mat InputSrcImg = imread(InputImgPath);
 	if (InputSrcImg.empty())
@@ -435,43 +582,43 @@ int WeChatTest()
 
 
 	/********************************识别复制按钮的位置******************************************/
-	string TemplatePath1 = "C:\\Users\\White\\Desktop\\WeChatMatchTest\\fuzhi.jpg";
-	string InputImgPath1 = "C:\\Users\\White\\Desktop\\WeChatMatchTest\\6.png";
-
-	Mat InputSrcImg1 = imread(InputImgPath1);
-	if (InputSrcImg.empty())
-	{
-		cout << "InputSrcImg image is empty!" << endl;
-		return 1;
-	}
-
-	Mat InputTmpImg1 = imread(TemplatePath1);
-	if (InputTmpImg1.empty())
-	{
-		cout << "InputTmpImg1 image is empty!" << endl;
-		return 1;
-	}
-
-	MatchRst Rst1;
-	Res = a.MatchButtonPos(InputSrcImg1, InputTmpImg1, Rst1);
-	if (!Res)
-	{
-		cout << "复制按钮匹配出错" << endl;
-		return 1;
-	}
-	cout << "坐标x:" << Rst1.nCentX << "坐标Y：" << Rst1.nCentY << endl;
-
-
-
-	Rect rect1;
-	rect1.x = Rst1.nCentX - (InputTmpImg1.cols / 2);
-	rect1.y = Rst1.nCentY - (InputTmpImg1.rows / 2);
-	rect1.height = InputTmpImg1.rows;
-	rect1.width = InputTmpImg1.cols;
-	rectangle(InputSrcImg1, rect1, Scalar(0, 0, 0), 2, 8, 0);//对外轮廓加矩形框 
-
-
-	imwrite("output_title.bmp", InputSrcImg1);
+// 	string TemplatePath1 = "C:\\Users\\White\\Desktop\\WeChatMatchTest\\fuzhi.jpg";
+// 	string InputImgPath1 = "C:\\Users\\White\\Desktop\\WeChatMatchTest\\6.png";
+// 
+// 	Mat InputSrcImg1 = imread(InputImgPath1);
+// 	if (InputSrcImg.empty())
+// 	{
+// 		cout << "InputSrcImg image is empty!" << endl;
+// 		return 1;
+// 	}
+// 
+// 	Mat InputTmpImg1 = imread(TemplatePath1);
+// 	if (InputTmpImg1.empty())
+// 	{
+// 		cout << "InputTmpImg1 image is empty!" << endl;
+// 		return 1;
+// 	}
+// 
+// 	MatchRst Rst1;
+// 	Res = a.MatchButtonPos(InputSrcImg1, InputTmpImg1, Rst1);
+// 	if (!Res)
+// 	{
+// 		cout << "复制按钮匹配出错" << endl;
+// 		return 1;
+// 	}
+// 	cout << "坐标x:" << Rst1.nCentX << "坐标Y：" << Rst1.nCentY << endl;
+// 
+// 
+// 
+// 	Rect rect1;
+// 	rect1.x = Rst1.nCentX - (InputTmpImg1.cols / 2);
+// 	rect1.y = Rst1.nCentY - (InputTmpImg1.rows / 2);
+// 	rect1.height = InputTmpImg1.rows;
+// 	rect1.width = InputTmpImg1.cols;
+// 	rectangle(InputSrcImg1, rect1, Scalar(0, 0, 0), 2, 8, 0);//对外轮廓加矩形框 
+// 
+// 
+// 	imwrite("output_title.bmp", InputSrcImg1);
 
 	//waitKey(0);
 
@@ -481,10 +628,17 @@ int WeChatTest()
 
 int main()
 {
+	//testReadFile();
+	//multiMatch2();
 	//multiMatch();
-	singleMatch();
+	//singleMatch();
 	//sliding();
 	//createModelFile();
 	//WeChatTest();
+	for (int i = 0; i < 100; i++)
+	{
+		cout << i << endl;
+		multiMatch();
+	}
 	return 0;
 }

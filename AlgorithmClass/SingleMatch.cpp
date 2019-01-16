@@ -457,7 +457,7 @@ bool SingleMatch::FindGeoMatchModel(Mat srcSobelDx, Mat srcSobelDy, MatchSection
 
 bool SingleMatch::DoInspect(Mat InputSrcImg, Mat InputTmpImg, vector<MatchRst> &RstVec, int nMatchNum, double dScoreThreshold)
 {
-	if (InputSrcImg.empty() || InputTmpImg.empty() || dScoreThreshold <= 0 || dScoreThreshold > 1
+	if (InputSrcImg.empty() || InputTmpImg.empty() || dScoreThreshold <= 0 || dScoreThreshold >= 1
 		|| nMatchNum < 1)
 	{
 		return false;
@@ -532,7 +532,14 @@ bool SingleMatch::DoInspect(Mat InputSrcImg, Mat InputTmpImg, vector<MatchRst> &
 			}
 
 			//降采样模板匹配中心映射至源图像的区域范围
-			for (int i = 0; i < RstVect.size(); ++i)
+			int nSize = RstVect.size();
+			if (nMatchNum <= nSize)
+			{
+				nSize = 2 * nMatchNum;
+			}
+
+			//降采样模板匹配中心映射至源图像的区域范围
+			for (int i = 0; i <nSize; ++i)
 			{
 				pyrSection.nStartX = (RstVect[i].nCentX << nPyrCont) - InputTmpImg.cols;
 				pyrSection.nStartY = (RstVect[i].nCentY << nPyrCont) - InputTmpImg.rows;
@@ -563,11 +570,7 @@ bool SingleMatch::DoInspect(Mat InputSrcImg, Mat InputTmpImg, vector<MatchRst> &
 
 				//源模板匹配过程
 				//VecSect.push_back(pyrSection);
-				start = clock();
 				bRes = Match(InputSrcImg, InputTmpImg, dScoreThreshold, 0, pyrSection, RstVec);
-				end = clock();
-				time = (double)(end - start);
-				cout << "原图匹配时间：" << time << endl;
 				if (!bRes)
 				{
 					return false;

@@ -72,10 +72,10 @@ namespace thr
 		{
 			stoped.store(true);
 			cv_task.notify_all(); // 唤醒所有线程执行
-			for (std::thread& thread : pool) {
-				//thread.detach(); // 让线程“自生自灭”
-				if (thread.joinable())
-					thread.join(); // 等待任务结束， 前提：线程一定会执行完
+			for (std::thread& th : pool) {
+				//th.detach(); // 让线程“自生自灭”
+				if (th.joinable())
+					th.join(); // 等待任务结束， 前提：线程一定会执行完
 			}
 		}
 
@@ -92,7 +92,7 @@ namespace thr
 				throw std::runtime_error("commit on ThreadPool is stopped.");
 
 			using RetType = decltype(f(args...)); // typename std::result_of<F(Args...)>::type, 函数 f 的返回值类型
-			auto task = std::make_shared<std::packaged_task<RetType()> >(
+			auto task = std::make_shared<std::packaged_task<RetType()>>(
 				std::bind(std::forward<F>(f), std::forward<Args>(args)...)
 				);    // wtf !
 			std::future<RetType> future = task->get_future();
@@ -112,6 +112,7 @@ namespace thr
 
 		//空闲线程数量
 		int idlCount() { return idlThrNum; }
+		size_t taskCount() { return tasks.size(); }
 
 	};
 }

@@ -80,21 +80,25 @@ bool WeChat::MatchNewsPosition(Mat InputImg, Mat TmpImg, vector<MatchRst> &rst)
 		return false;
 	}
 	Mat InputRoiImg = InputImg(Rect(InputImg.cols / 9, 0, InputImg.cols / 5 - InputImg.cols / 9, InputImg.rows * 8 / 9));
-	bool bRes = this->SM.DoInspect(InputRoiImg, TmpImg, rst, 20, 0.8);
+	bool bRes = this->SM.DoInspect(InputRoiImg, TmpImg, rst, 20, 0.85);
 	if (!bRes)
 	{
 		return false;
 	}
 
-    int nTemp = InputImg.cols/9 + 45;
-    for(int i = 0; i < rst.size(); i++)
-	{
-        rst[i].nCentX += nTemp;
-    }
-	if (rst.size() > 0)
+	// 按Y坐标从小到大排序
+	int num = rst.size();
+	if (num > 0)
 	{
 		sort(rst.begin(), rst.end(), comp);
 	}
+
+    int nTemp = InputImg.cols/9 + 45;
+	for (int i = 0; i < rst.size(); i++)
+	{
+        rst[i].nCentX += nTemp;
+    }
+	
 
 	return true;
 }

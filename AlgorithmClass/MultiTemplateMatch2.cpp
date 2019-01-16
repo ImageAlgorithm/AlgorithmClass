@@ -6,25 +6,34 @@
 #include <opencv2/opencv.hpp>
 #include <io.h>
 #include "structure.h"
-#include "MultiTemplateMatch.h"
+#include "MultiTemplateMatch2.h"
 
 using namespace std;
 using namespace cv;
 
-vector<Result> MultiMatch::res;
+vector<Result> MultiMatch2::res;
 
 /************************************************************************/
 /* 构造对象时，首先情况静态对象 res                                       */
 /************************************************************************/
-MultiMatch::MultiMatch()
+MultiMatch2::MultiMatch2()
 {
+	this->tmpInfo = new TmpInfo[1];
 	this->res.clear();
 	ClearVector(this->res);
 }
 
-MultiMatch::~MultiMatch()
+MultiMatch2::MultiMatch2(int fileNum)
 {
+	this->tmpInfo = new TmpInfo[fileNum];
+	this->res.clear();
+	ClearVector(this->res);
+}
 
+MultiMatch2::~MultiMatch2()
+{
+	delete[] this->tmpInfo;
+	this->tmpInfo = NULL;
 }
 
 
@@ -37,7 +46,7 @@ MultiMatch::~MultiMatch()
 // Parameter: vector<T> & vt
 //************************************
 template <class T>
-void MultiMatch::ClearVector(vector<T>& vt)
+void MultiMatch2::ClearVector(vector<T>& vt)
 {
 	vector< T > vtTemp;
 	vtTemp.swap(vt);
@@ -53,7 +62,7 @@ void MultiMatch::ClearVector(vector<T>& vt)
 // Parameter: Mat & InputSobelDx：存放图像X方向Sobel信息的Mat
 // Parameter: Mat & InputSobelDy：存放图像Y方向Soble信息的Mat
 //************************************
-bool MultiMatch::GetSobelEdge(Mat InputImg, Mat& InputSobelDx, Mat& InputSobelDy)
+bool MultiMatch2::GetSobelEdge(Mat InputImg, Mat& InputSobelDx, Mat& InputSobelDy)
 {
 	if (InputImg.empty())
 	{
@@ -81,7 +90,7 @@ bool MultiMatch::GetSobelEdge(Mat InputImg, Mat& InputSobelDx, Mat& InputSobelDy
 // Parameter: vector<double> & srcData：存储原模板信息的变量
 // Parameter: vector<double> & pyrData：存储降采样以后模板信息的变量
 //************************************
-bool MultiMatch::Read(const string path, int &nTmpWidth, int &nTmpHeight, int &nPyrCount, vector<double>& srcData, vector<double>& pyrData)
+bool MultiMatch2::Read(const string path, int &nTmpWidth, int &nTmpHeight, int &nPyrCount, vector<double>& srcData, vector<double>& pyrData)
 {
 	if (path == "")
 	{
@@ -160,7 +169,7 @@ bool MultiMatch::Read(const string path, int &nTmpWidth, int &nTmpHeight, int &n
 // Parameter: const char * pDir：文件夹的路径（绝对路径）
 // Parameter: vector<string> & files：带绝对路径的文件名的集合
 //************************************
-bool MultiMatch::ListFiles(const char *pDir, vector<string> &files)
+bool MultiMatch2::ListFiles(const char *pDir, vector<string> &files)
 {
 	if (NULL == pDir)
 	{
@@ -207,7 +216,7 @@ bool MultiMatch::ListFiles(const char *pDir, vector<string> &files)
 // Parameter: MatchRst a
 // Parameter: MatchRst b
 //************************************
-bool MultiMatch::comp(MatchRst a, MatchRst b)
+bool MultiMatch2::comp(MatchRst a, MatchRst b)
 {
 	return (a.dScore) > (b.dScore);
 }
@@ -222,7 +231,7 @@ bool MultiMatch::comp(MatchRst a, MatchRst b)
 // Parameter: int height：而二维数组的高度
 // Parameter: int width：二维数组的宽度
 //************************************
-bool MultiMatch::CreateDoubleMatrix(double** &matrix, int nHeight, int nWidth)
+bool MultiMatch2::CreateDoubleMatrix(double** &matrix, int nHeight, int nWidth)
 {
 	matrix = new double*[nHeight];
 	if (NULL == matrix)
@@ -251,7 +260,7 @@ bool MultiMatch::CreateDoubleMatrix(double** &matrix, int nHeight, int nWidth)
 // Parameter: double * * & matrix：double类型的二位指针
 // Parameter: int nHeight：二维数组的高度
 //************************************
-void MultiMatch::DeleteDoubleMatrix(double **&matrix, int nHeight)
+void MultiMatch2::DeleteDoubleMatrix(double **&matrix, int nHeight)
 {
 	for (int i = 0; i < nHeight; ++i)
 	{
@@ -269,7 +278,7 @@ void MultiMatch::DeleteDoubleMatrix(double **&matrix, int nHeight)
 // Qualifier:
 // Parameter: float x：需要开方的数据
 //************************************
-float MultiMatch::InvSqrt(float x)
+float MultiMatch2::InvSqrt(float x)
 {
 	float xhalf = 0.5f*x;
 	int i = *(int*)&x;
@@ -297,7 +306,7 @@ float MultiMatch::InvSqrt(float x)
 // Parameter: double dGgreediness：贪婪系数
 // Parameter: vector<MatchRst> & RstVec：存放结果的集合
 //************************************
-bool MultiMatch::FindGeoMatchModel(Mat srcSobelDx, Mat srcSobelDy, MatchSection matchSection, int nofEdgePiex,
+bool MultiMatch2::FindGeoMatchModel(Mat srcSobelDx, Mat srcSobelDy, MatchSection matchSection, int nofEdgePiex,
 	vector<CvPoint> pPositionEdge, vector<double> pEdgeMagnitude, vector<double> pEdgeMX, vector<double> pEdgeMY,
 	double ScoreThreshold, double dGgreediness, vector<MatchRst> &RstVec)
 {
@@ -388,7 +397,7 @@ bool MultiMatch::FindGeoMatchModel(Mat srcSobelDx, Mat srcSobelDy, MatchSection 
 				RstVec.push_back(Rst);
 			}
 
-			if (dPartialScore < 0.2)
+			if (dPartialScore < 0.3)
 			{
 				j += 2;
 			}
@@ -409,7 +418,7 @@ bool MultiMatch::FindGeoMatchModel(Mat srcSobelDx, Mat srcSobelDy, MatchSection 
 // Parameter: double dScoreThreshold：分数阈值
 // Parameter: MultiMatch & sMM：MultiMatch对象
 //************************************
-void MultiMatch::threadproc(InputImagInfo info, TmpInfo tmpInfo, double dScoreThreshold, MultiMatch &sMM)
+void MultiMatch2::threadproc(InputImagInfo info, TmpInfo tmpInfo, double dScoreThreshold)
 {
     Mat InputImg = info.InputImg;
     Mat InputSobelDx = info.InputSobelDx;
@@ -471,7 +480,7 @@ void MultiMatch::threadproc(InputImagInfo info, TmpInfo tmpInfo, double dScoreTh
 
         //获取降采样源图像边缘梯度
         Mat InputpyrSobelDx, InputpyrSobelDy;
-        Res = sMM.GetSobelEdge(pyrImg, InputpyrSobelDx, InputpyrSobelDy);
+        Res = GetSobelEdge(pyrImg, InputpyrSobelDx, InputpyrSobelDy);
         if (!Res)
 		{
             cout << str << "Inputpyr image sobel edge failed！" << endl;
@@ -495,7 +504,7 @@ void MultiMatch::threadproc(InputImagInfo info, TmpInfo tmpInfo, double dScoreTh
 		matSec.nStartY = 0;
 		matSec.nEndX = pyrImg.cols;
 		matSec.nEndY = pyrImg.rows;
-        Res = sMM.FindGeoMatchModel(InputpyrSobelDx, InputpyrSobelDy, matSec, nPyrnOfEdgePiex,
+        Res = FindGeoMatchModel(InputpyrSobelDx, InputpyrSobelDy, matSec, nPyrnOfEdgePiex,
                                     pPositionEdge, pEdgeMagnitude, pEdgeMX, pEdgeMY,
                                     pyrScoreThreshold, dPyrdGreediness, pyrRstVec);
 
@@ -577,7 +586,7 @@ void MultiMatch::threadproc(InputImagInfo info, TmpInfo tmpInfo, double dScoreTh
 	}
 
 	double dSrcGreediness = 0.8;
-    Res = sMM.FindGeoMatchModel(InputSobelDx, InputSobelDy, matSec, nSrcnOfEdgePiex, srcpPositionEdge,
+    Res = FindGeoMatchModel(InputSobelDx, InputSobelDy, matSec, nSrcnOfEdgePiex, srcpPositionEdge,
                                 srcpEdgeMagnitude, srcpEdgeMX, srcpEdgeMY, dSrcScoreThreshold, dSrcGreediness, srcRstVec);
     if (!Res)
     {
@@ -594,32 +603,23 @@ void MultiMatch::threadproc(InputImagInfo info, TmpInfo tmpInfo, double dScoreTh
         r.targetname = str;
 		res.push_back(r);   //res 作为参数引用传出
     }
-    return ;
+    return;
 }
 
 //************************************
-// Method:    DoInspect：得到识别结果
-// FullName:  MultiMatch::DoInspect
+// Method:    InitData：读取识别需要的数据
+// FullName:  MultiMatch::InitData
 // Access:    public 
 // Returns:   bool
 // Qualifier:
-// Parameter: Mat & InputIm：待识别的原图
-// Parameter: vector<string> files：带绝对路径的文件名
-// Parameter: double scoreThreshold：识别的阈值
-// Parameter: MultiMatch & sMM：MultiMatch类的对象
+// Parameter: Mat & InputImg：待识别的图片
+// Parameter: vector<string> vecFiles：带绝对路径的文件名
 //************************************
-bool MultiMatch::DoInspect(Mat &InputImg, vector<string> vecFiles, double dScoreThreshold, int nThrNum, MultiMatch &sMM)
+bool MultiMatch2::InitData(Mat &InputImg, vector<string> vecFiles)
 {
 	bool Res = false;
 	//读取txt文件
-	
 	int nFileNum = vecFiles.size();
-	TmpInfo* tmpInfo = new TmpInfo[nFileNum];
-	if (tmpInfo == NULL) 
-	{
-		return 1;
-	}
-
 	int pos = 0;
 	string str;
 	for (int i = 0; i < nFileNum; ++i)
@@ -629,8 +629,6 @@ bool MultiMatch::DoInspect(Mat &InputImg, vector<string> vecFiles, double dScore
 		if (!Res)
 		{
 			cout << " read failed" << endl;
-            delete[] tmpInfo;
-            tmpInfo = NULL;
 			return 1;
 		}
 
@@ -641,36 +639,15 @@ bool MultiMatch::DoInspect(Mat &InputImg, vector<string> vecFiles, double dScore
 		pos = str.rfind('/');
 		tmpInfo[i].tmpname = str.erase(0, pos + 1);
 	}
+
 	//获取源图像x、y方向梯度
-	Mat InputSobelDx, InputSobelDy;
-	Res = GetSobelEdge(InputImg, InputSobelDx, InputSobelDy);
+	this->imageInfo.InputImg = InputImg;
+	Res = GetSobelEdge(InputImg, this->imageInfo.InputSobelDx, this->imageInfo.InputSobelDy);
 	if (!Res)
 	{
 		cout << "Input image sobel edge failed！" << endl;
-        delete[] tmpInfo;
-        tmpInfo = NULL;
 		return false;
 	}
 
-	InputImagInfo info;
-	info.InputImg = InputImg;
-	info.InputSobelDx = InputSobelDx;
-	info.InputSobelDy = InputSobelDy;
-
-	thr::threadpool pool(nThrNum);
-	for (int i = 0; i < nFileNum; i++)
-	{	
-		pool.commit(threadproc, info, tmpInfo[i], dScoreThreshold, sMM);
-		cout << "空闲线程数量：" << pool.idlCount() << endl;
-		cout << "任务个数：" << pool.taskCount() << endl;
-	}
-
-	while (pool.idlCount() < nThrNum && pool.taskCount() > 0)
-	{
-		;
-	}
-
-    delete[] tmpInfo;
-    tmpInfo = NULL;
     return true;
 }
